@@ -61,6 +61,15 @@ export default createGlobalStyle`
     }
   }
 
+  button.btn--icon {
+    display: flex;
+    align-items: center;
+
+    svg {
+      margin-right: 5px;
+    }
+  }
+
   form {
     display: flex;
     flex-direction: column;
