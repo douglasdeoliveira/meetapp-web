@@ -1,6 +1,9 @@
+import { darken } from 'polished';
 import { createGlobalStyle } from 'styled-components';
 
 import 'react-toastify/dist/ReactToastify.css';
+
+import colors from './colors';
 
 export default createGlobalStyle`
   @import url('https://fonts.googleapis.com/css?family=Roboto:400,700&display=swap');
@@ -38,5 +41,23 @@ export default createGlobalStyle`
 
   button {
     cursor: pointer;
+  }
+
+  button.btn {
+    padding: 0 15px;
+    color: #fff;
+    border: 0;
+    border-radius: 4px;
+    font-weight: bold;
+    font-size: 16px;
+    transition: background 0.2s;
+  }
+
+  button.btn--primary {
+    background: ${colors.primary};
+
+    &:hover {
+      background: ${darken(0.03, colors.primary)};
+    }
   }
 `;

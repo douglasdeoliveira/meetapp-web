@@ -1,14 +1,13 @@
+import { ApplicationState } from 'store';
+
+import { UserProfile } from '../user/types';
+
 /*
  * DATA TYPES
  */
-export interface User {
-  name: string;
-  email: string;
-}
-
 export interface Session {
   token: string;
-  user: User;
+  user: UserProfile;
 }
 
 /*
@@ -28,6 +27,7 @@ export const SIGN_IN_SUCCESS = '@auth/SIGN_IN_SUCCESS';
 export const SIGN_UP_REQUEST = '@auth/SIGN_UP_REQUEST';
 export const SIGN_FAILURE = '@auth/SIGN_FAILURE';
 export const SIGN_OUT = '@auth/SIGN_OUT';
+export const REHYDRATE = 'persist/REHYDRATE';
 
 /*
  * ACTIONS
@@ -42,10 +42,7 @@ export interface SignInRequestAction {
 
 export interface SignInSuccessAction {
   type: typeof SIGN_IN_SUCCESS;
-  payload: {
-    token: string;
-    user: User;
-  };
+  payload: Session;
 }
 
 export interface SignUpRequestAction {
@@ -63,6 +60,11 @@ interface SignFailureAction {
 
 interface SignOutAction {
   type: typeof SIGN_OUT;
+}
+
+export interface RehydrateAction {
+  type: typeof REHYDRATE;
+  payload: ApplicationState;
 }
 
 export type AuthActionTypes =

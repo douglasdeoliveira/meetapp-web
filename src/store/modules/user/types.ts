@@ -1,4 +1,8 @@
+/*
+ * DATA TYPES
+ */
 export interface UserProfile {
+  id?: number;
   name: string;
   email: string;
   password?: string;
@@ -6,33 +10,11 @@ export interface UserProfile {
   confirmPassword?: string;
 }
 
-// export interface IUserAction {
-//   type: string;
-//   payload: {
-//     profile: IUser;
-//     user: IUser;
-//     data: IUser;
-//   };
-// }
-
-/*
- * DATA TYPES
- */
-// export interface User {
-//   name: string;
-//   email: string;
-// }
-
-// export interface Session {
-//   token: string;
-//   user: User;
-// }
-
 /*
  * STATE TYPES
  */
 export interface UserState {
-  readonly profile: any;
+  readonly profile: UserProfile;
 }
 
 /*

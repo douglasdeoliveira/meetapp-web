@@ -1,6 +1,7 @@
+import { UserProfile } from '../user/types';
+
 import {
   AuthActionTypes,
-  User,
   SIGN_FAILURE,
   SIGN_IN_REQUEST,
   SIGN_IN_SUCCESS,
@@ -18,7 +19,10 @@ export function singInRequest(
   };
 }
 
-export function signInSuccess(token: string, user: User): AuthActionTypes {
+export function signInSuccess(
+  token: string,
+  user: UserProfile
+): AuthActionTypes {
   return {
     type: SIGN_IN_SUCCESS,
     payload: { token, user },

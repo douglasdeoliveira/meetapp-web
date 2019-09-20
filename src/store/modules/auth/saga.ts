@@ -5,6 +5,8 @@ import history from 'services/history';
 
 import { signFailure, signInSuccess } from './actions';
 import {
+  REHYDRATE,
+  RehydrateAction,
   SIGN_IN_REQUEST,
   SIGN_OUT,
   SIGN_UP_REQUEST,
@@ -22,11 +24,6 @@ export function* signIn({ payload }: SignInRequestAction) {
     });
 
     const { token, user } = response.data;
-
-    // if (!user.provider) {
-    //   toast.error('Usuário não é prestador');
-    //   return;
-    // }
 
     api.defaults.headers.Authorization = `Bearer ${token}`;
 
@@ -52,14 +49,12 @@ export function* signUp({ payload }: SignUpRequestAction) {
   }
 }
 
-export function setToken(data: any) {
-  console.tron.log(data);
-
-  if (!data.payload) {
+export function setToken({ payload }: RehydrateAction) {
+  if (!payload) {
     return;
   }
 
-  const { token } = data.payload.auth;
+  const { token } = payload.auth;
 
   if (token) {
     api.defaults.headers.Authorization = `Bearer ${token}`;
@@ -71,7 +66,7 @@ export function signOut() {
 }
 
 export default all([
-  takeLatest('persist/REHYDRATE', setToken),
+  takeLatest(REHYDRATE, setToken),
   takeLatest(SIGN_IN_REQUEST, signIn),
   takeLatest(SIGN_UP_REQUEST, signUp),
   takeLatest(SIGN_OUT, signOut),
