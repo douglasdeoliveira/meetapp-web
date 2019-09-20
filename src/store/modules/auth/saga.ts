@@ -1,23 +1,32 @@
 import { toast } from 'react-toastify';
 import { all, call, put, takeLatest } from 'redux-saga/effects';
-
 import api from 'services/api';
 import history from 'services/history';
 
 import { signFailure, signInSuccess } from './actions';
+import {
+  SIGN_IN_REQUEST,
+  SIGN_OUT,
+  SIGN_UP_REQUEST,
+  SignInRequestAction,
+  SignUpRequestAction,
+} from './types';
 
-export function* signIn({ payload }) {
+export function* signIn({ payload }: SignInRequestAction) {
   try {
     const { email, password } = payload;
 
-    const response = yield call(api.post, 'sessions', { email, password });
+    const response = yield call(api.post, 'sessions', {
+      email,
+      password,
+    });
 
     const { token, user } = response.data;
 
-    if (!user.provider) {
-      toast.error('Usuário não é prestador');
-      return;
-    }
+    // if (!user.provider) {
+    //   toast.error('Usuário não é prestador');
+    //   return;
+    // }
 
     api.defaults.headers.Authorization = `Bearer ${token}`;
 
@@ -30,11 +39,11 @@ export function* signIn({ payload }) {
   }
 }
 
-export function* signUp({ payload }) {
+export function* signUp({ payload }: SignUpRequestAction) {
   try {
     const { name, email, password } = payload;
 
-    yield call(api.post, 'users', { name, email, password, provider: true });
+    yield call(api.post, 'users', { name, email, password });
 
     history.push('/');
   } catch (error) {
@@ -43,12 +52,14 @@ export function* signUp({ payload }) {
   }
 }
 
-export function setToken({ payload }) {
-  if (!payload) {
+export function setToken(data: any) {
+  console.tron.log(data);
+
+  if (!data.payload) {
     return;
   }
 
-  const { token } = payload.auth;
+  const { token } = data.payload.auth;
 
   if (token) {
     api.defaults.headers.Authorization = `Bearer ${token}`;
@@ -61,7 +72,7 @@ export function signOut() {
 
 export default all([
   takeLatest('persist/REHYDRATE', setToken),
-  takeLatest('@auth/SIGN_IN_REQUEST', signIn),
-  takeLatest('@auth/SIGN_UP_REQUEST', signUp),
-  takeLatest('@auth/SIGN_OUT', signOut),
+  takeLatest(SIGN_IN_REQUEST, signIn),
+  takeLatest(SIGN_UP_REQUEST, signUp),
+  takeLatest(SIGN_OUT, signOut),
 ]);

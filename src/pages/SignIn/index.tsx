@@ -1,11 +1,16 @@
 import { Form, Input } from '@rocketseat/unform';
+import logo from 'assets/logo.svg';
 import React from 'react';
-// import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
+import { ApplicationState } from 'store';
+import { singInRequest } from 'store/modules/auth/actions';
 import * as Yup from 'yup';
 
-import logo from 'assets/logo.svg';
-// import { singInRequest } from '~/store/modules/auth/actions';
+interface Credentials {
+  email: string;
+  password: string;
+}
 
 const schema = Yup.object().shape({
   email: Yup.string()
@@ -15,18 +20,19 @@ const schema = Yup.object().shape({
 });
 
 export default function SignIn() {
-  // const dispatch = useDispatch();
-  // const loading = useSelector(state => state.auth.loading);
-  const loading = false;
-  // function handleSubmit({ email, password }) {
-  //   dispatch(singInRequest(email, password));
-  // }
+  const dispatch = useDispatch();
+  const loading = useSelector((state: ApplicationState) => state.auth.loading);
+
+  function handleSubmit(data: any) {
+    const { email, password }: Credentials = data;
+    dispatch(singInRequest(email, password));
+  }
 
   return (
     <>
-      <img src={logo} alt="GoBarber" />
+      <img src={logo} alt="MeetApp" />
 
-      <Form schema={schema} onSubmit={() => {}}>
+      <Form schema={schema} onSubmit={handleSubmit}>
         <Input
           name="email"
           type="email"
