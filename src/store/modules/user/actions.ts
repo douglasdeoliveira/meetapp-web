@@ -1,22 +1,18 @@
-/* eslint-disable no-console */
 import {
   UPDATE_PROFILE_FAILURE,
   UPDATE_PROFILE_REQUEST,
   UPDATE_PROFILE_SUCCESS,
+  UserProfile,
 } from './types';
 
-export function updateProfileRequest(data: any) {
-  console.log(data);
-
+export function updateProfileRequest(profile: UserProfile) {
   return {
     type: UPDATE_PROFILE_REQUEST,
-    payload: { data },
+    payload: profile,
   };
 }
 
-export function updateProfileSuccess(profile: any) {
-  console.log(profile);
-
+export function updateProfileSuccess(profile: UserProfile) {
   return {
     type: UPDATE_PROFILE_SUCCESS,
     payload: { profile },

@@ -3,20 +3,18 @@ import { all, call, put, takeLatest } from 'redux-saga/effects';
 import api from 'services/api';
 
 import { updateProfileFailure, updateProfileSuccess } from './actions';
+import { UPDATE_PROFILE_REQUEST, UpdateProfileRequestAction } from './types';
 
-export function* updateProfile({ payload }: any) {
-  // eslint-disable-next-line no-console
-  console.log(payload);
-
+export function* updateProfile({ payload }: UpdateProfileRequestAction) {
   try {
-    const { name, email, ...rest } = payload.data;
-    console.tron.log(rest);
+    const { name, email, ...rest } = payload;
+
     const profile = {
       name,
       email,
-      ...(rest.oldPassword !== '' ? rest : {}),
+      ...(rest.old_password !== '' ? rest : {}),
     };
-    console.tron.log(profile);
+
     const response = yield call(api.put, 'users', profile);
 
     toast.success('Perfil atualizado com sucesso');
@@ -27,4 +25,4 @@ export function* updateProfile({ payload }: any) {
     yield put(updateProfileFailure());
   }
 }
-export default all([takeLatest('@user/UPDATE_PROFILE_REQUEST', updateProfile)]);
+export default all([takeLatest(UPDATE_PROFILE_REQUEST, updateProfile)]);

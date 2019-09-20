@@ -6,8 +6,8 @@ export interface UserProfile {
   name: string;
   email: string;
   password?: string;
-  oldPassword?: string;
-  confirmPassword?: string;
+  old_password?: string;
+  password_confirmation?: string;
 }
 
 /*
@@ -29,18 +29,14 @@ export const UPDATE_PROFILE_FAILURE = '@user/UPDATE_PROFILE_FAILURE';
  */
 export interface UpdateProfileRequestAction {
   type: typeof UPDATE_PROFILE_REQUEST;
-  payload: {
-    name: string;
-    email: string;
-    password?: string;
-    oldPassword?: string;
-    confirmPassword?: string;
-  };
+  payload: UserProfile;
 }
 
 export interface UpdateProfileSuccessAction {
   type: typeof UPDATE_PROFILE_SUCCESS;
-  payload: any;
+  payload: {
+    profile: UserProfile;
+  };
 }
 
 export interface UpdateProfileFailureAction {
