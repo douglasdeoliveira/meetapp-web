@@ -18,9 +18,9 @@ export default function Dashboard() {
   const [meetups, setMeetups] = useState<Meetup[]>([]);
 
   useEffect(() => {
-    async function loadMeetups() {
-      const response = await api.get('/meetups');
-      const arrayMeetup: Meetup[] = response.data.map((item: Meetup) => ({
+    async function loadMyMeetups() {
+      const response = await api.get('/organizing');
+      const myMeetups: Meetup[] = response.data.map((item: Meetup) => ({
         id: item.id,
         title: item.title,
         formatedDate: format(parseISO(item.date), "dd 'de' MMMM', às' HH'h' ", {
@@ -28,35 +28,37 @@ export default function Dashboard() {
         }),
       }));
 
-      setMeetups(arrayMeetup);
+      setMeetups(myMeetups);
     }
 
-    loadMeetups();
+    loadMyMeetups();
   }, []);
 
   return (
     <Container>
       <Header>
         <h1>Meus Meetups</h1>
-        <Link to="/new">
-          <button type="button" className="btn btn--primary btn--icon">
-            <MdAddCircleOutline size={20} color="fff" />
-            Novo Meetup
-          </button>
+        <Link to="/meetup/new" className="btn btn--primary btn--icon">
+          <MdAddCircleOutline size={20} color="fff" />
+          Novo Meetup
         </Link>
       </Header>
       <MeetupsList>
-        {meetups.map(meetup => (
-          <Link to={`/meetup/${meetup.id}`} key={String(meetup.id)}>
-            <MeetupItem>
-              <strong>{meetup.title}</strong>
-              <div>
-                <span>{meetup.formatedDate}</span>
-                <MdChevronRight size={24} color="#fff" />
-              </div>
-            </MeetupItem>
-          </Link>
-        ))}
+        {meetups.length > 0 ? (
+          meetups.map(meetup => (
+            <Link to={`/meetup/${meetup.id}`} key={String(meetup.id)}>
+              <MeetupItem>
+                <strong>{meetup.title}</strong>
+                <div>
+                  <span>{meetup.formatedDate}</span>
+                  <MdChevronRight size={24} color="#fff" />
+                </div>
+              </MeetupItem>
+            </Link>
+          ))
+        ) : (
+          <p>Você não possui nenhum Meetup cadastrado</p>
+        )}
       </MeetupsList>
     </Container>
   );

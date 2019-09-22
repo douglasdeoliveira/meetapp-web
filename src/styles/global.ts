@@ -19,15 +19,15 @@ export default createGlobalStyle`
     outline: 0;
   }
 
-  html, body, #root {
-    height: 100%;
+  html, body {
+    height: auto;
   }
 
   body {
     -webkit-font-smoothing: antialiased !important;
   }
 
-  body, input, button {
+  body, input, textarea, button {
     font: 14px Roboto, sans-serif;
   }
 
@@ -43,7 +43,7 @@ export default createGlobalStyle`
     cursor: pointer;
   }
 
-  button.btn {
+  .btn {
     padding: 0 15px;
     color: #fff;
     border: 0;
@@ -53,7 +53,7 @@ export default createGlobalStyle`
     transition: background 0.2s;
   }
 
-  button.btn--primary {
+  .btn--primary {
     background: ${colors.primary};
 
     &:hover {
@@ -61,7 +61,15 @@ export default createGlobalStyle`
     }
   }
 
-  button.btn--icon {
+  .btn--secondary {
+    background: ${colors.secondary};
+
+    &:hover {
+      background: ${darken(0.03, colors.secondary)};
+    }
+  }
+
+  .btn--icon {
     display: flex;
     align-items: center;
 
@@ -73,9 +81,8 @@ export default createGlobalStyle`
   form {
     display: flex;
     flex-direction: column;
-    margin-top: 30px;
 
-    input {
+    input, textarea {
       background: rgba(0, 0, 0, 0.1);
       border: 0;
       border-radius: 4px;
@@ -87,6 +94,11 @@ export default createGlobalStyle`
       &::placeholder {
         color: rgba(255, 255, 255, 0.7);
       }
+    }
+
+    textarea {
+      max-width: 100%;
+      padding-top: 15px;
     }
 
     span {
