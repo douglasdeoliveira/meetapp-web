@@ -7,12 +7,12 @@ import api from 'services/api';
 
 import { Container, Header, MeetupItem, MeetupsList } from './styles';
 
-interface Meetup {
+type Meetup = {
   id: number;
   title: string;
   date: string;
   formatedDate?: string;
-}
+};
 
 export default function Dashboard() {
   const [meetups, setMeetups] = useState<Meetup[]>([]);

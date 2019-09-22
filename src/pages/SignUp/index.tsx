@@ -7,11 +7,11 @@ import { ApplicationState } from 'store';
 import { signUpRequest } from 'store/modules/auth/actions';
 import * as Yup from 'yup';
 
-interface Credentials {
+type Credentials = {
   name: string;
   email: string;
   password: string;
-}
+};
 
 const schema = Yup.object().shape({
   name: Yup.string().required('O nome é obrigatório'),

@@ -11,7 +11,7 @@ import BannerInput from './BannerInput';
 import DatePicker from './DatePicker';
 import { Container } from './styles';
 
-interface Meetup {
+type Meetup = {
   title: string;
   description: string;
   date: string;
@@ -19,7 +19,7 @@ interface Meetup {
   file: {
     url: string;
   };
-}
+};
 
 const schema = Yup.object().shape({
   file_id: Yup.number().required('A imagem é obrigatória'),

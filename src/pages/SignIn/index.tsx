@@ -7,10 +7,10 @@ import { ApplicationState } from 'store';
 import { singInRequest } from 'store/modules/auth/actions';
 import * as Yup from 'yup';
 
-interface Credentials {
+type Credentials = {
   email: string;
   password: string;
-}
+};
 
 const schema = Yup.object().shape({
   email: Yup.string()

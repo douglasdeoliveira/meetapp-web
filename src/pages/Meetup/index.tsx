@@ -1,37 +1,55 @@
+import { format, parseISO } from 'date-fns';
+import pt from 'date-fns/locale/pt';
 import React, { useEffect, useState } from 'react';
-import { MdDeleteForever, MdEdit } from 'react-icons/md';
+import {
+  MdDeleteForever,
+  MdEdit,
+  MdInsertInvitation,
+  MdRoom,
+} from 'react-icons/md';
 import { Link, RouteComponentProps } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import api from 'services/api';
 
-import { Container, Header } from './styles';
+import { Banner, Container, Description, Header, Info } from './styles';
 
-interface Meetup {
-  id: number;
+type Meetup = {
   title: string;
+  description: string;
+  location: string;
   date: string;
   formatedDate?: string;
-}
+  file: {
+    url: string;
+  };
+};
 
 type Props = RouteComponentProps<any>;
 
 export default function Meetup({ match, history }: Props) {
-  const [meetup, setMeetup] = useState<Meetup>();
   const meetupId = match.params.id;
+
+  const [meetup, setMeetup] = useState<Meetup>({
+    title: '',
+    description: '',
+    location: '',
+    date: '',
+    file: { url: '' },
+  });
 
   useEffect(() => {
     async function loadMeetup() {
       const response = await api.get(`/meetups/${meetupId}`);
 
-      // const arrayMeetup: Meetup[] = response.data.map((item: Meetup) => ({
-      //   id: item.id,
-      //   title: item.title,
-      //   formatedDate: format(parseISO(item.date), "dd 'de' MMMM', às' HH'h' ", {
-      //     locale: pt,
-      //   }),
-      // }));
+      response.data.formatedDate = format(
+        parseISO(response.data.date),
+        "dd 'de' MMMM', às' HH'h' ",
+        {
+          locale: pt,
+        }
+      );
 
-      // setMeetup(arrayMeetup);
+      setMeetup(response.data);
     }
 
     loadMeetup();
@@ -50,7 +68,7 @@ export default function Meetup({ match, history }: Props) {
   return (
     <Container>
       <Header>
-        <h1>Meus Meetups</h1>
+        <h1>{meetup.title}</h1>
         <div className="actions">
           <Link to="/meetup/edit/1" className="btn btn--secondary btn--icon">
             <MdEdit size={20} color="fff" />
@@ -66,6 +84,23 @@ export default function Meetup({ match, history }: Props) {
           </button>
         </div>
       </Header>
+
+      <div>
+        <Banner src={meetup.file.url} alt={meetup.title} />
+        <Description>
+          <p>{meetup.description}</p>
+        </Description>
+        <Info>
+          <div>
+            <MdInsertInvitation size={20} />
+            <span>{meetup.formatedDate}</span>
+          </div>
+          <div>
+            <MdRoom size={20} />
+            <span>{meetup.location}</span>
+          </div>
+        </Info>
+      </div>
     </Container>
   );
 }
