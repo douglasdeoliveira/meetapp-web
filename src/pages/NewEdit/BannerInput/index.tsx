@@ -7,22 +7,31 @@ import { Container } from './styles';
 
 type Props = {
   name: string;
+  imageId: number | null;
   imageUrl: string;
 };
 
-export default function BannerInput({ name, imageUrl }: Props) {
+export default function BannerInput({ name, imageId, imageUrl }: Props) {
   const ref: any = useRef();
 
   const { defaultValue, registerField, error } = useField(name);
 
-  const [file, setFile] = useState(defaultValue && defaultValue.id);
-  const [preview, setPreview] = useState(defaultValue && defaultValue.url);
+  const [file, setFile] = useState<number>(defaultValue && defaultValue.id);
+  const [preview, setPreview] = useState<string>(
+    defaultValue && defaultValue.url
+  );
 
   useEffect(() => {
     if (imageUrl) {
       setPreview(imageUrl);
     }
   }, [imageUrl]);
+
+  useEffect(() => {
+    if (imageId) {
+      setFile(imageId);
+    }
+  }, [imageId]);
 
   useEffect(() => {
     if (ref.current) {

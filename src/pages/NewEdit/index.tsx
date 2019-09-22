@@ -1,6 +1,6 @@
 import { Form, Input } from '@rocketseat/unform';
 import { format } from 'date-fns';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { MdAddCircleOutline } from 'react-icons/md';
 import { RouteComponentProps } from 'react-router-dom';
 import { toast } from 'react-toastify';
@@ -16,6 +16,7 @@ type Meetup = {
   description: string;
   date: string;
   location: string;
+  file_id: number | null;
   file: {
     url: string;
   };
@@ -34,15 +35,44 @@ const schema = Yup.object().shape({
 type Props = RouteComponentProps<any>;
 
 export default function NewEdit({ match, history }: Props) {
-  const [meetup, setMeetup] = useState<Meetup>();
+  const meetupId = match.params.id;
 
-  async function handleSubmit(data: any) {
+  const [description, setDescription] = useState<string>('');
+  const [meetup, setMeetup] = useState<Meetup>({
+    title: '',
+    description: '',
+    location: '',
+    date: '',
+    file_id: null,
+    file: { url: '' },
+  });
+
+  useEffect(() => {
+    async function loadMeetup() {
+      const response = await api.get(`/meetups/${meetupId}`);
+
+      setMeetup(response.data);
+      setDescription(response.data.description);
+    }
+    if (meetupId) {
+      loadMeetup();
+    }
+  }, [meetupId]);
+
+  async function updateMeetup(data: any) {
     try {
-      const newData = {
-        ...data,
-        date: format(new Date(data.date), "yyyy-MM-dd'T'HH:mm:ssxxx"),
-      };
-      await api.post(`/meetups`, newData);
+      await api.put(`/meetups/${meetupId}`, data);
+
+      toast.success('Meetup atualizado com sucesso');
+      history.push(`/meetup/${meetupId}`);
+    } catch (err) {
+      toast.error('Error ao atualizar o meetup');
+    }
+  }
+
+  async function createMeetup(data: any) {
+    try {
+      await api.post('/meetups', data);
 
       toast.success('Meetup criado com sucesso');
       history.push('/');
@@ -51,13 +81,36 @@ export default function NewEdit({ match, history }: Props) {
     }
   }
 
+  function handleSubmit(data: any) {
+    const newData = {
+      ...data,
+      date: format(new Date(data.date), "yyyy-MM-dd'T'HH:mm:ssxxx"),
+    };
+
+    if (meetupId) {
+      updateMeetup(newData);
+    } else {
+      createMeetup(newData);
+    }
+  }
+
   return (
     <Container>
       <Form schema={schema} initialData={meetup} onSubmit={handleSubmit}>
-        <BannerInput name="file_id" imageUrl="" />
+        <BannerInput
+          name="file_id"
+          imageUrl={meetup.file.url}
+          imageId={meetup.file_id}
+        />
         <Input name="title" placeholder="Título do Meetup" autoComplete="off" />
-        <Input name="description" multiline placeholder="Descrição completa" />
-        <DatePicker name="date" initialDate={undefined} />
+        <Input
+          multiline
+          name="description"
+          value={description}
+          onChange={e => setDescription(e.target.value)}
+          placeholder="Descrição completa"
+        />
+        <DatePicker name="date" initialDate={meetup.date} />
         <Input name="location" placeholder="Localização" autoComplete="off" />
 
         <button type="submit" className="btn btn--primary btn--icon">

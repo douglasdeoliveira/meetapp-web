@@ -58,7 +58,7 @@ export default function Meetup({ match, history }: Props) {
   async function handleDelete() {
     try {
       await api.delete(`/meetups/${meetupId}`);
-      toast.success('Meetup Cancelado com sucesso');
+      toast.success('Meetup cancelado com sucesso');
       history.push('/dashboard');
     } catch (err) {
       toast.error('Não é possivel cancelar esse Meetup');
@@ -70,7 +70,10 @@ export default function Meetup({ match, history }: Props) {
       <Header>
         <h1>{meetup.title}</h1>
         <div className="actions">
-          <Link to="/meetup/edit/1" className="btn btn--secondary btn--icon">
+          <Link
+            to={`/meetup/edit/${meetupId}`}
+            className="btn btn--secondary btn--icon"
+          >
             <MdEdit size={20} color="fff" />
             Editar
           </Link>
