@@ -5,6 +5,8 @@ import history from 'services/history';
 
 import { signFailure, signInSuccess } from './actions';
 import {
+  REFRESH_TOKEN,
+  RefreshTokenAction,
   REHYDRATE,
   RehydrateAction,
   SIGN_IN_REQUEST,
@@ -61,12 +63,25 @@ export function setToken({ payload }: RehydrateAction) {
   }
 }
 
+export function refreshToken({ payload }: RefreshTokenAction) {
+  if (!payload) {
+    return;
+  }
+
+  const { token } = payload;
+
+  if (token) {
+    api.defaults.headers.Authorization = `Bearer ${token}`;
+  }
+}
+
 export function signOut() {
   history.push('/');
 }
 
 export default all([
   takeLatest(REHYDRATE, setToken),
+  takeLatest(REFRESH_TOKEN, refreshToken),
   takeLatest(SIGN_IN_REQUEST, signIn),
   takeLatest(SIGN_UP_REQUEST, signUp),
   takeLatest(SIGN_OUT, signOut),
