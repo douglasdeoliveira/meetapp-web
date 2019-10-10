@@ -1,5 +1,6 @@
 import { format, parseISO } from 'date-fns';
 import pt from 'date-fns/locale/pt';
+import Modali, { useModali } from 'modali';
 import React, { useEffect, useState } from 'react';
 import {
   MdDeleteForever,
@@ -37,6 +38,37 @@ export default function Meetup({ match, history }: Props) {
     file: { url: '' },
   });
 
+  async function handleDelete() {
+    try {
+      await api.delete(`/meetups/${meetupId}`);
+      toast.success('Meetup cancelado com sucesso');
+      history.push('/dashboard');
+    } catch (err) {
+      toast.error('Não é possivel cancelar esse Meetup');
+    }
+  }
+
+  const [deleteModal, toggleModal] = useModali({
+    animated: true,
+    title: 'Você tem certeza?',
+    message: 'Deletar esse meetup não poderá ser desfeito.',
+    buttons: [
+      <Modali.Button
+        label="Cancelar"
+        isStyleCancel
+        onClick={() => toggleModal()}
+      />,
+      <Modali.Button
+        label="Deletar"
+        isStyleDestructive
+        onClick={() => {
+          handleDelete();
+          toggleModal();
+        }}
+      />,
+    ],
+  });
+
   useEffect(() => {
     async function loadMeetup() {
       const response = await api.get(`/meetups/${meetupId}`);
@@ -55,16 +87,6 @@ export default function Meetup({ match, history }: Props) {
     loadMeetup();
   }, [meetupId]);
 
-  async function handleDelete() {
-    try {
-      await api.delete(`/meetups/${meetupId}`);
-      toast.success('Meetup cancelado com sucesso');
-      history.push('/dashboard');
-    } catch (err) {
-      toast.error('Não é possivel cancelar esse Meetup');
-    }
-  }
-
   return (
     <Container>
       <Header>
@@ -79,7 +101,7 @@ export default function Meetup({ match, history }: Props) {
           </Link>
           <button
             type="button"
-            onClick={handleDelete}
+            onClick={toggleModal}
             className="btn btn--primary btn--icon"
           >
             <MdDeleteForever size={20} color="fff" />
@@ -104,6 +126,8 @@ export default function Meetup({ match, history }: Props) {
           </div>
         </Info>
       </div>
+
+      <Modali.Modal {...deleteModal} />
     </Container>
   );
 }
