@@ -1,6 +1,6 @@
-# Desafio 09. Front-end do Meetapp
+# Front-end
 
-Nesse desafio você irá construir o front-end com ReactJS do Meetapp que utilizará a API que você desenvolveu durante os desafios do segundo e terceiro módulo de Node.js.
+Nesse desafio você irá construir o front-end com ReactJS do Meetapp que utilizará a API que você desenvolveu anteriormente.
 
 Crie uma aplicação do zero utilizando create-react-app e configure as ferramentas de padrões de código, Reactotron, Redux e Redux Saga.
 
@@ -9,6 +9,26 @@ Essa aplicação será utilizada por organizadores de meetups e não contará co
 Essa aplicação faz parte do desafio final do bootcamp utilizado para finalização e certificação.
 
 O layout do projeto está anexado nesse repositório.
+
+## Scripts de execução
+
+Instalando as dependências:
+
+```
+yarn install
+```
+
+Executar o projeto:
+
+```
+yarn start
+```
+
+Gerar o build:
+
+```
+yarn build
+```
 
 ## Telas
 
@@ -45,3 +65,7 @@ Utilize validação nos campos.
 O usuário deve poder editar suas informações de cadastro.
 
 Utilize validação nos campos.
+
+## TODO
+
+- Desenvolver e implementar testes

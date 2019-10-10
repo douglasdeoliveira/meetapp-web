@@ -37,7 +37,6 @@ type Props = RouteComponentProps<any>;
 export default function NewEdit({ match, history }: Props) {
   const meetupId = match.params.id;
 
-  const [description, setDescription] = useState<string>('');
   const [meetup, setMeetup] = useState<Meetup>({
     title: '',
     description: '',
@@ -52,7 +51,6 @@ export default function NewEdit({ match, history }: Props) {
       const response = await api.get(`/meetups/${meetupId}`);
 
       setMeetup(response.data);
-      setDescription(response.data.description);
     }
     if (meetupId) {
       loadMeetup();
@@ -103,13 +101,7 @@ export default function NewEdit({ match, history }: Props) {
           imageId={meetup.file_id}
         />
         <Input name="title" placeholder="Título do Meetup" autoComplete="off" />
-        <Input
-          multiline
-          name="description"
-          value={description}
-          onChange={e => setDescription(e.target.value)}
-          placeholder="Descrição completa"
-        />
+        <Input multiline name="description" placeholder="Descrição completa" />
         <DatePicker name="date" initialDate={meetup.date} />
         <Input name="location" placeholder="Localização" autoComplete="off" />
 

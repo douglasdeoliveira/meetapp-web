@@ -83,7 +83,7 @@ export default function Meetup({ match, history }: Props) {
             className="btn btn--primary btn--icon"
           >
             <MdDeleteForever size={20} color="fff" />
-            Cacenlar
+            Deletar
           </button>
         </div>
       </Header>
