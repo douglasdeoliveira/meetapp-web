@@ -44,6 +44,7 @@ export function* signUp({ payload }: SignUpRequestAction) {
 
     yield call(api.post, 'users', { name, email, password });
 
+    toast.success('Sua conta foi criada com sucesso!');
     history.push('/');
   } catch (error) {
     toast.error('Falha no cadastro! Verifique seus dados');
